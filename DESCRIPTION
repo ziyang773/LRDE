@@ -11,7 +11,8 @@ Description: Provides hurdle negative binomial models for differential expressio
 Depends: 
     R (>= 4.1.0)
 Imports: 
-    stats,
+    stats
+Suggests: 
     SummarizedExperiment
 License: MIT + file LICENSE
 Encoding: UTF-8

@@ -39,10 +39,14 @@ prepareDGE <- function(data, group) {
   if (inherits(data, "DGEList")) {
     data <- data$counts
 
-  } else if (inherits(data, "DESeqDataSet")) {
-    data <- SummarizedExperiment::assay(data)
-
-  } else if (inherits(data, "SummarizedExperiment")) {
+  } else if (inherits(data, "DESeqDataSet") || inherits(data, "SummarizedExperiment")) {
+    # Check if SummarizedExperiment is installed
+    if (!requireNamespace("SummarizedExperiment", quietly = TRUE)) {
+      stop(
+        "Package 'SummarizedExperiment' is required to process this input type. ",
+        "Please install it or provide a matrix/data.frame instead."
+      )
+    }
     data <- SummarizedExperiment::assay(data)
 
   } else if (is.data.frame(data)) {
