@@ -1,2 +1,5 @@
-.Rproj.user
-inst/doc
+.Rproj.user/
+*.Rproj
+inst/doc/
+.DS_Store
+*.tar.gz
