@@ -22,7 +22,7 @@ The package is optimized for long-read sequencing data with high dropout rates, 
 ## File Structure
 
 | File / Folder                         | Description                                                                 |
-|--------------------------------------|-----------------------------------------------------------------------------|
+|---------------------------------------|-----------------------------------------------------------------------------|
 | `R/estimateSizeFactors.R`             | Functions for estimating normalization size factors for RNA-Seq counts.    |
 | `R/estimateDispersion.R`              | Functions for prior estimation and tag-wise dispersion estimation.          |
 | `R/hurdleNBTest.R`                    | Functions for hurdle-NB differential expression testing (Wald & LRT).      |
