@@ -1,8 +1,8 @@
-Changes in version 0.99.0
+Changes in version 0.99.3
 
     o Initial Bioconductor submission of LRDE.
 
-    o Implements a hurdle negative binomial (Hurdle-NB) model for 
+    o Implements a hurdle negative binomial (Hurdle-NB) model for
       differential expression analysis of long-read RNA-seq data.
 
     o Includes:

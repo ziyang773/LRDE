@@ -8,7 +8,11 @@ author:
     affiliation: "University of Arizona"
     email: "hongxuding@arizona.edu"
 package: LRDE
-output: rmarkdown::html_vignette
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{Introduction to LRDE}
   %\VignetteEngine{knitr::rmarkdown}
@@ -16,6 +20,7 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+library(BiocStyle)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -34,7 +39,7 @@ The core contribution of `LRDE` is the integration of a hurdle model with **empi
 
 ## 1. Hurdle Model
 
-For each gene \( g \) and sample \( i \), the observed count \( y_{ig} \) is modeled using a two-component framework:
+For each gene gene $g$ and sample $i$, the observed count $y_{ig}$ is modeled using a two-component framework:
 
 - **Zero component:**  
   A Bernoulli distribution models the probability of observing a structural zero (dropout).
@@ -53,7 +58,7 @@ Long-read RNA-seq data are often noisy, particularly for lowly expressed genes. 
 
 - **Prior estimation:**  
   Within each bin, empirical priors are estimated for:
-  - the dispersion parameter (\( \phi \))  
+  - the dispersion parameter ($\phi$)  
   - the zero-component probability (treated as fixed during tagwise estimation and differential testing)
 
 - **Shrinkage:**  
@@ -82,16 +87,15 @@ The main object returned by `LRDE` is a list containing the following components
 - `p.values`: p-values for differential expression  
 
 These components can be accessed directly using standard list indexing.
-`LRDE` also supports input from `SummarizedExperiment` objects, enabling integration with standard Bioconductor workflows.
+`LRDE` also supports input from `r Biocpkg("SummarizedExperiment")` objects, enabling integration with standard Bioconductor workflows.
 
 # Example Workflow
 
 This section demonstrates a minimal end-to-end workflow for differential expression analysis using `LRDE`.
 
-```{r}
+```{r usage example}
 # Load the package
 suppressPackageStartupMessages(library(LRDE))
-
 set.seed(123)
 
 # 1. Simulate a count matrix (Negative Binomial)
@@ -140,8 +144,40 @@ head(padj)
 
 Genes with adjusted p-values below a chosen threshold (e.g., FDR < 0.05) are typically considered significantly differentially expressed.
 
+# Supported Input Format
+
+In addition to standard `matrix` and `data.frame`, `prepareDGE` supports `r Biocpkg("SummarizedExperiment")` objects, allowing `LRDE` to integrate seamlessly into existing Bioconductor workflows.
+```{r SE_input}
+# 1. Create a SummarizedExperiment object
+suppressPackageStartupMessages(library(SummarizedExperiment))
+set.seed(123)
+
+# Simulate data
+counts_mat <- matrix(rnbinom(300, size = 5, mu = 5), nrow = 50)
+colnames(counts_mat) <- paste0("Sample", 1:6)
+group_info <- factor(c("A", "A", "A", "B", "B", "B"))
+
+# Construct SE with colData
+se <- SummarizedExperiment(
+    assays = list(counts = counts_mat),
+    colData = data.frame(condition = group_info)
+)
+
+# 2. Start the LRDE pipeline using the SE object
+# Extract the condition directly from colData
+y_se <- prepareDGE(se, group = colData(se)$condition)
+
+# 3. Standard downstream workflow
+y_se <- sizeFactorsEst(y_se)
+y_se <- tagwiseEst(y_se)
+y_se <- hurdle_LRT(y_se)
+
+# View results
+head(y_se$lrt_stats)
+```
+
 # Session Information
 
-```{r}
+```{r sessionInfo, echo=FALSE}
 sessionInfo()
 ```

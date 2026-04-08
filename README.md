@@ -34,21 +34,30 @@ The package is optimized for long-read sequencing data with high dropout rates, 
 
 ## Installation
 
-Install the package from GitHub using `devtools`:
+To install the stable **release** version of `LRDE` from Bioconductor:
 
 ```r
-# Install devtools if not already installed
-install.packages("devtools")
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-# Install LRDE from GitHub
-devtools::install_github("ziyang773/LRDE")
+BiocManager::install("LRDE")
+```
 
+To install the development version (currently required while under review):
+```r
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("LRDE", version = "devel")
+```
+
+## Example usage
+```r
 # Load the package
 library(LRDE)
 
-# Example usage
-set.seed(123)
 # 1. Simulate a count matrix (negative binomial)
+set.seed(123)
 mat <- matrix(rnbinom(300, size = 5, mu = 5), nrow = 50)
 grp <- factor(c("A", "A", "A", "B", "B", "B"))
 

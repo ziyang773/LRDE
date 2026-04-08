@@ -30,8 +30,11 @@ NULL
 #' y <- prepareDGE(mat, grp)
 #'
 #' # Example with a SummarizedExperiment
-#' # se <- SummarizedExperiment::SummarizedExperiment(assays = list(counts = mat))
-#' # y <- prepareDGE(se, grp)
+#' if (requireNamespace("SummarizedExperiment", quietly = TRUE)) {
+#'     se <- SummarizedExperiment::SummarizedExperiment(assays = list(counts = mat))
+#'     y_se <- prepareDGE(se, grp)
+#'     y
+#' }
 #'
 #' @export
 prepareDGE <- function(data, group) {
